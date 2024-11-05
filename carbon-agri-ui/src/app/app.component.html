@@ -1,0 +1,25 @@
+<nav class="navbar navbar-expand-lg navbar-light bg-light">
+  <a class="navbar-brand p-l-xs" href="#">AGRI CARBON MAPPER</a>
+  <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor03" aria-controls="navbarColor03" aria-expanded="false" aria-label="Toggle navigation" (click)="isCollapsed = !isCollapsed">
+    <span class="navbar-toggler-icon"></span>
+  </button>
+
+  <div class="collapse navbar-collapse" id="navbarColor03" [ngbCollapse]="isCollapsed">
+    <ul class="navbar-nav mr-auto p-xs">
+      <li class="nav-item active p-xs">
+        <a class="nav-link" routerLink="/home">HOME</a>
+      </li>
+      <li class="nav-item p-xs">
+        <a class="nav-link" routerLink="/dashboard">DASHBOARD</a>
+      </li>
+      <li class="nav-item p-xs">
+        <a class="nav-link" routerLink="/map">MAP</a>
+      </li>
+      <li class="nav-item p-xs">
+        <a class="nav-link" href="#">CONTACT</a>
+      </li>
+    </ul>
+  </div>
+</nav>
+
+<router-outlet></router-outlet>

@@ -1,0 +1,17 @@
+#map { height: 600px; width: 100%; }
+
+.header-container {
+    text-align: left; /* Center-align the text in the header */
+    margin-bottom: 20px; /* Optional: Add some space below the header */
+}
+
+.image-container {
+    display: flex;               /* Use Flexbox to display images in a row */
+    justify-content: center;      /* Center the images horizontally */
+    gap: 10px;                    /* Space between images */
+}
+
+.image-container img {
+    max-width: 100%;              /* Ensure images don't overflow */
+    border-radius: 8px;           /* Optional: Add smooth edges to the images */
+}

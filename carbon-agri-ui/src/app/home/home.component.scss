@@ -1,0 +1,32 @@
+/* Section styling */
+section {
+    width: 100%;
+    height: 600px;
+    background-image: url('https://kajabi-storefronts-production.kajabi-cdn.com/kajabi-storefronts-production/file-uploads/blogs/7280/images/72bbbd7-6f0b-aaa-7f2-311742153f6b_DALL_E_2024-08-08_05.40.26_-_A_banner_image_illustrating_the_impact_of_deforestation_on_climate_change_and_biodiversity._The_left_side_shows_a_lush_green_forest_with_various_plan.webp');
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/* Container styling */
+.container {
+    margin-top: 40px;
+}
+
+/* Text styling for muted text */
+.text-mute {
+    margin-top: 30px;
+    padding: 10px;
+    font-size: 1.5rem; /* Adjusted to rem for better scalability */
+    color: rgb(91, 91, 91);
+    font-family: 'Open Sans', sans-serif; /* Added custom font */
+    line-height: 1.6; /* Increased line height for better readability */
+}
+
+/* Styling for Goals heading */
+.container h2 {
+    font-family: 'Roboto', sans-serif; /* Custom font for the heading */
+    font-size: 2.5rem; /* Increased font size for the heading */
+    font-weight: bold; /* Bold font for emphasis */
+    color: #333; /* Darker color for better contrast */
+    margin-bottom: 0.5em; /* Spacing below the heading */
+}
