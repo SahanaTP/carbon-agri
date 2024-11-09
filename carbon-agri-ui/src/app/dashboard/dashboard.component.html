@@ -2,14 +2,14 @@
     <br>
     <h3 style="text-align: center"> US Agri-Carbon Tabular data</h3>
     <mat-form-field>
-        <input matInput placeholder="Enter Farm" type="text">  
+        <input matInput placeholder="Enter Farm" type="text" #farmName>  
     </mat-form-field>
     <mat-form-field>
-        <input matInput placeholder="Enter Date" type="text">
+        <input matInput placeholder="Enter Date" type="text" #date>
     </mat-form-field>
     <br>
     <div class="button-container">
-        <button mat-flat-button class="custom-button">Submit</button>
+        <button mat-flat-button class="custom-button" (click)="fetchData(farmName.value, date.value)">Submit</button>
         <button mat-flat-button class="custom-button">Cancel</button>
       </div>
     </div>
