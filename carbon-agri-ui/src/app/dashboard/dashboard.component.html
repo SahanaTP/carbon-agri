@@ -1,19 +1,38 @@
 <div class = "container">
     <br>
-    <h3 style="text-align: center"> US Agri-Carbon Tabular data</h3>
+    <h3 style="text-align: center"> US Agri-Carbon data Statistics</h3>
+    
     <mat-form-field>
-        <input matInput placeholder="Enter Farm" type="text" #farmName>  
+        <mat-label>Select Farm</mat-label>
+        <mat-select [(value)]="selectedFarm">
+            <mat-option></mat-option>
+            @for (option of farms; track option) {
+            <mat-option [value]="option.value">{{ option.viewValue }}</mat-option>
+            }
+        </mat-select>
     </mat-form-field>
-    <mat-form-field>
-        <input matInput placeholder="Enter Date" type="text" #date>
-    </mat-form-field>
+    
     <br>
     <div class="button-container">
-        <button mat-flat-button class="custom-button" (click)="fetchData(farmName.value, date.value)">Submit</button>
-        <button mat-flat-button class="custom-button">Cancel</button>
+        <button mat-flat-button class="custom-button" (click)="fetchData(selectedFarm)">Submit</button>
       </div>
-    </div>
-    <div class = "table-container">
+</div>
+
+<div class="row">
+    <div class="col1">
+        <h6>{{selectedFarm}}: NDVI across the year</h6>
+        <canvas id="lineGraph"></canvas>
+
+    </div> 
+    <div class="col2">
+        <h6>{{selectedFarm}}: NPP across the year</h6>
+        <canvas id="lineGraph2"></canvas>
+
+    </div>  
+</div>
+
+<div class = "table-container">
+        <h6>{{selectedFarm}}: Vegetation Data</h6>
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 
         <!--- Note that these columns can be defined in any order.
@@ -66,52 +85,18 @@
           <th mat-header-cell *matHeaderCellDef> Npp </th>
           <td mat-cell *matCellDef="let agrifarm"> {{agrifarm.Npp}} </td>
         </ng-container>
-
-
-        <!-- Humidity Column -->
-        <ng-container matColumnDef="Humidity">
-            <th mat-header-cell *matHeaderCellDef> Humidity </th>
-            <td mat-cell *matCellDef="let agrifarm"> {{agrifarm.Humidity}} </td>
-          </ng-container>
-
-          <!-- SoilTemperature Column -->
-        <ng-container matColumnDef="SoilTemperature">
-            <th mat-header-cell *matHeaderCellDef> SoilTemperature </th>
-            <td mat-cell *matCellDef="let agrifarm"> {{agrifarm.SoilTemperature}} </td>
-          </ng-container>
-
-          <!-- WindSpeed Column -->
-        <ng-container matColumnDef="WindSpeed">
-            <th mat-header-cell *matHeaderCellDef> WindSpeed </th>
-            <td mat-cell *matCellDef="let agrifarm"> {{agrifarm.WindSpeed}} </td>
-          </ng-container>
-
-          <!-- WindDirection Column -->
-        <ng-container matColumnDef="WindDirection">
-            <th mat-header-cell *matHeaderCellDef> WindDirection </th>
-            <td mat-cell *matCellDef="let agrifarm"> {{agrifarm.WindDirection}} </td>
-          </ng-container>
-
-          <!-- AtmosphericPressure Column -->
-        <ng-container matColumnDef="AtmosphericPressure">
-            <th mat-header-cell *matHeaderCellDef> AtmosphericPressure </th>
-            <td mat-cell *matCellDef="let agrifarm"> {{agrifarm.AtmosphericPressure}} </td>
-          </ng-container>
-
-          <!-- RelativeHumidity Column -->
-        <ng-container matColumnDef="RelativeHumidity">
-            <th mat-header-cell *matHeaderCellDef> RelativeHumidity </th>
-            <td mat-cell *matCellDef="let agrifarm"> {{agrifarm.RelativeHumidity}} </td>
-          </ng-container>
-
-          <!-- Npp Column -->
-        <ng-container matColumnDef="Precipitation">
-            <th mat-header-cell *matHeaderCellDef> Precipitation </th>
-            <td mat-cell *matCellDef="let agrifarm"> {{agrifarm.Precipitation}} </td>
-          </ng-container>
-
       
         <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
         <tr mat-row *matRowDef="let agrifarms; columns: displayedColumns;"></tr>
       </table>
-    </div>
+
+    <mat-paginator 
+                [pageSizeOptions]="[5, 10, 20]"
+                 showFirstLastButtons
+                 aria-label="Select page of periodic elements">
+    </mat-paginator>
+
+    
+
+</div>
+

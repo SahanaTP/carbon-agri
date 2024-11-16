@@ -1,22 +1,70 @@
-#map { height: 600px; width: 100%; }
+#map { margin: 20px auto;height: 600px; width: 100%; border-color: #333; border: 2px solid black;}
 
-.header-container {
-    text-align: left; /* Center-align the text in the header */
-    margin-bottom: 20px; /* Optional: Add some space below the header */
-}
 
-.image-container {
-    display: flex;               /* Use Flexbox to display images in a row */
-    justify-content: center;      /* Center the images horizontally */
-    gap: 10px;                    /* Space between images */
-}
 
-.image-container img {
-    max-width: 100%;              /* Ensure images don't overflow */
-    border-radius: 8px;           /* Optional: Add smooth edges to the images */
-}
+  /* Container styling */
+.container {
+    margin-top: 100px;
+    margin-left: 100px;
+    max-width: 500px;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    justify-content: center;
+    align-items: center;
+    float: left;   
+  }
 
-#map {
-    height: 500px;
-    width: 100%;
+
+  /* Heading styling */
+  h3 {
+    font-size: 25px;
+    color: #333;
+    margin-bottom: 30px;
+    text-align: center;
+    font-weight: bold;
+  }
+  
+  /* Form field styling */
+  mat-form-field {
+    width: 80%;
+    margin-bottom: 20px;
+    margin-left: 40px;
+    justify-content: center;
+    align-items: left;
+  }
+  
+  input[matInput] {
+    padding: 10px;
+    font-size: 16px;
+    text-align: center;
+    justify-content: center;
+  }
+  
+  input[matInput]::placeholder {
+    color: #888;
+    justify-content: center;
+  }
+  
+  /* Container to center the buttons */
+.button-container {
+    display: flex;
+    justify-content: center; /* Center-align the buttons horizontally */
+    margin-top: 20px; /* Add some margin if needed */
+  }
+  
+  /* Style for buttons */
+  .custom-button {
+    margin-left: 15px; /* Adjust spacing between buttons */
+    border-radius: 25px; /* Smooth rounded edges */
+    padding: 10px 20px; /* Add some padding for better appearance */
+    font-size: 16px; /* Adjust font size */
+  }
+  
+  /* Optional: Add hover effect for better user experience */
+  .custom-button:hover {
+    background-color: #5a5a5a; /* Darker shade on hover */
+    color: white; /* Change text color on hover */
+    transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out; /* Smooth transition */
   }

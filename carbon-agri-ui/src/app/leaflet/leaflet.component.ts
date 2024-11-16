@@ -1,105 +1,102 @@
-//import { Component, CUSTOM_ELEMENTS_SCHEMA, AfterViewInit } from '@angular/core';
-// import * as L from 'leaflet';
-// import { Observable, Subscriber } from 'rxjs';
-// import { environment } from '../../environments/environment';
-// import { NgbDropdownModule } from '@ng-bootstrap/ng-bootstrap';
-// import { Agrifarms } from '../agrifarms';
-// import { AgrifarmsService } from '../agrifarms.service';
-// import { LeafletModule } from '@asymmetrik/ngx-leaflet';
-//import '/Users/sahana/Desktop/carbon_agri/carbon-agri-ui/src/app/leaflet/leaflet-heat.js';
-
-// @Component({
-//   selector: 'app-leaflet',
-//   standalone: true,
-//   imports: [NgbDropdownModule, LeafletModule],
-//   templateUrl: './leaflet.component.html',
-//   styleUrl: './leaflet.component.scss',
-//   schemas: [CUSTOM_ELEMENTS_SCHEMA],  //
-// })
-// export class LeafletComponent {
-//   map: any;
-//   farm: string = 'Oklahoma';
-//   agrifarms:Agrifarms[]=[];
-
-//   constructor(private agrifarmsService:AgrifarmsService){}
-
-
-//   options ={ 
-//     layers: [
-//       L.tileLayer("http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-//         maxZoom: 12,
-//         attribution: ""
-//       })
-//     ],
-//     zoom: 12,
-//     center: L.latLng(36.601, -97.492)
-//   };
-//     // this.map = L.map("map").setView([36.601, -97.492], 11);
-
-//     // L.tileLayer("https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png", {
-//     //   attribution:
-//     //     '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
-//     // }).addTo(this.map);
-
-
-
-//   // Function to handle farm selection from the dropdown
-//   onFarmSelect(selectedFarm: string) {
-//     this.farm = selectedFarm;  // Update the farm parameter
-//     this.loadCarbonData('2016-06-25', this.farm);  // Reload data for the selected farm
-//   }
-
-//   onMapReady(map: L.Map) {
-//     let newAddressPoints = this.agrifarms.map(function (p) { return [p['latitude'], p['longitude']]; });
-//     const heat = L.heatLayer(newAddressPoints).addTo(map);
-//   }
-  
-//   loadCarbonData(date: string, farm: string) {
-//     this.agrifarmsService.fetchAllDataForAFarm(farm, date).subscribe(data => {
-//       this.agrifarms=data;
-
-//       // data.forEach(point => {
-//       //  // this.map.flyTo([point.latitude, point.longitude], 13);
-//       //   const marker = L.marker([point.latitude, point.longitude])
-//       //     .addTo(this.map)
-//       //     .bindPopup(`<b>Date:</b> ${point.Date}<br><b>NPP Value:</b> ${point.Npp}`)
-//       //     .openPopup();
-//       // });
-//     });
-    
-//   }
-// }
-
 import {Component, OnInit} from '@angular/core';
 import * as leaflet from 'leaflet';
-import 'heatmap.js';
-import { heatData } from './heatData';
 import { LeafletModule } from '@asymmetrik/ngx-leaflet';
 import HeatmapOverlay from 'leaflet-heatmap/leaflet-heatmap.js'
+import { Agrifarms } from '../agrifarms';
+import { AgrifarmsService } from '../agrifarms.service';
+import { MatFormFieldModule } from '@angular/material/form-field';
+import { MatInputModule } from '@angular/material/input';
+import { MatButtonModule } from '@angular/material/button';
+import { MatTableModule } from '@angular/material/table';
+import { MatSelectModule } from '@angular/material/select';
+import { icon, Marker } from 'leaflet';
+const iconRetinaUrl = 'assets/marker-icon-2x.png';
+const iconUrl = 'assets/marker-icon.png';
+const shadowUrl = 'assets/marker-shadow.png';
+const iconDefault = icon({
+  iconRetinaUrl,
+  iconUrl,
+  shadowUrl,
+  iconSize: [25, 41],
+  iconAnchor: [12, 41],
+  popupAnchor: [1, -34],
+  tooltipAnchor: [16, -28],
+  shadowSize: [41, 41]
+});
+Marker.prototype.options.icon = iconDefault;
 
 
-//declare const HeatmapOverlay: any;
+interface Farm{
+  value: string;
+  viewValue: string;
+}
 
 @Component({
   selector: 'app-leaflet',
   standalone: true,
-  imports:[LeafletModule],
+  imports:[LeafletModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatTableModule, MatSelectModule],
   templateUrl: './leaflet.component.html',
   styleUrls: ['./leaflet.component.scss']
 })
 export class LeafletComponent implements OnInit {
   private map: any;
+  private heatmapLayer: any;
+  farm: string = 'Oklahoma';
+  dateData: string = '2016-06-25'
+  heatData:any;
+  agrifarms:Agrifarms[]=[];
+  
 
+  constructor(private agrifarmsService:AgrifarmsService){}
+  farms: Farm[] = [
+    {value: 'Oklahoma', viewValue: 'Oklahoma'},
+    {value: 'Missouri_BAU', viewValue: 'Missouri BAU'},
+    {value: 'Missouri_ASP', viewValue: 'Missouri ASP'},
+    {value: 'Nebraska_I_M', viewValue: 'Nebraska IM'},
+    {value: 'Nebraska_I_M_S', viewValue: 'Nebraska IMS'},
+    {value: 'Nebraska_R_M_S', viewValue: 'Nebraska RMS'},
+  ];
+
+  selectedFarm = this.farms[0].value;
+
+  loadCarbonData(date: string, farm: string) {
+    this.agrifarmsService.fetchAllDataForAFarm(farm, date).subscribe(data => {
+      this.agrifarms=data;
+       this.heatData = {
+        max: 10,
+        data: this.agrifarms.map(farm => ({
+          lat: farm.latitude,
+          lng: farm.longitude,
+          count: farm.Npp // Extract Npp (Net Primary Production) value
+        }))
+      };
+    
+      // Update map center based on the first farm's latitude and longitude
+      if (this.agrifarms.length > 0) {
+        const centerLat = this.agrifarms[0].latitude;
+        const centerLng = this.agrifarms[0].longitude;
+        this.map.setView([centerLat, centerLng], 16); // Dynamically set the center based on farm
+
+        // Update heatmap layer data
+        this.heatmapLayer.setData(this.heatData);
+        // Add markers with popups
+        this.addPopupsToMap();
+      }
+    });
+    
+  }
   ngOnInit(): void {
     this.initMap();
+    
+    
   }
 
   private initMap(): void {
     // Initialising map with center point by using the coordinates
     // Setting initial zoom to 3
     this.map = leaflet.map('map', {
-      center: leaflet.latLng(36.6586, -70.3568),
-      zoom: 2
+      center: leaflet.latLng(36.601, -97.492),
+      zoom: 3
     });
 
     // Initialising tiles to the map by using openstreetmap
@@ -115,9 +112,9 @@ export class LeafletComponent implements OnInit {
 
     // Setting up heat layer config
     const heatLayerConfig = {
-      "radius": 5,
+      "radius": 15,
       "maxOpacity": .8,
-      "scaleRadius": true,
+      "scaleRadius": false,
       // property below is responsible for colorization of heat layer
       "useLocalExtrema": true,
       // here we need to assign property value which represent lat in our data
@@ -129,16 +126,29 @@ export class LeafletComponent implements OnInit {
     };
 
     // Initialising heat layer and passing config
-    const heatmapLayer = new HeatmapOverlay(heatLayerConfig);
+     this.heatmapLayer = new HeatmapOverlay(heatLayerConfig);
 
-    // var testData = {
-    //   max: 8,
-    //   data: [{lat: 24.6408, lng:46.7728, count: 3},{lat: 50.75, lng:-1.55, count: 1}]
-    // };
+    
     //Passing data to a layer
-    heatmapLayer.setData(heatData);
+    //heatmapLayer.setData(this.heatData);
 
     //Adding heat layer to a map
-    heatmapLayer.addTo(this.map);
+    this.heatmapLayer.addTo(this.map);
+  }
+
+  // Add popups to each data point
+  private addPopupsToMap(): void {
+    this.agrifarms.forEach(farm => {
+      const marker = leaflet.marker([farm.latitude, farm.longitude]).addTo(this.map);
+      marker.setOpacity(0);
+
+      // Bind popup with farm details (e.g., NPP, Lat, Lng)
+      marker.bindPopup(
+        `<b>Farm: ${this.selectedFarm}</b><br>` +
+        `<b>NPP:</b> ${farm.Npp}<br>` +
+        `<b>Latitude:</b> ${farm.latitude}<br>` +
+        `<b>Longitude:</b> ${farm.longitude}`
+      );
+    });
   }
 }

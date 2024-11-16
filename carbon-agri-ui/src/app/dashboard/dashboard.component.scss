@@ -1,13 +1,14 @@
 /* Container styling */
 .container {
     margin: 20px auto;
-    max-width: 600px;
+    max-width: 400px;
     padding: 20px;
     background-color: #f8f9fa;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     justify-content: center;
     align-items: center;
+    float: center;   
   }
 
   .table-container {
@@ -19,11 +20,38 @@
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     justify-content: center;
     align-items: center;
+    float: center;
+    clear: both;
   }
+
+  .col1{
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 70%; /* Adjust width as needed, e.g., 100%, 80%, etc. */
+    max-width: 1000px; /* Optional: limit the maximum width */
+    height: 50%; /* Set a fixed height, adjust as needed */
+    overflow: auto; /* Optional: add scroll if content overflows */
+}
+
+.col2 {
+    margin: 20px auto;
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 70%; /* Adjust width as needed, e.g., 100%, 80%, etc. */
+    max-width: 1000px; /* Optional: limit the maximum width */
+    height: 50%; /* Set a fixed height, adjust as needed */
+    overflow: auto; /* Optional: add scroll if content overflows */
+}
+
   
   /* Heading styling */
   h3 {
-    font-size: 32px;
+    font-size: 25px;
     color: #333;
     margin-bottom: 30px;
     text-align: center;
@@ -36,7 +64,7 @@
     margin-bottom: 20px;
     margin-left: 40px;
     justify-content: center;
-    align-items: center;
+    align-items: left;
   }
   
   input[matInput] {

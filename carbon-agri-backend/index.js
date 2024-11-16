@@ -40,23 +40,36 @@ const Data = mongoose.model('carbon_data', DataSchema);
 
 // API endpoint to fetch records based on Date and Farm
 app.get('/api/carbon_data', async (req, res) => {
-  const { date, farm } = req.query;
+  const { farm, date } = req.query;
 
   // Validate query parameters
-  if (!date || !farm) {
-    return res.status(400).json({ message: 'Date and Farm query parameters are required' });
+  if ( !farm) {
+    return res.status(400).json({ message: 'Farm query parameter is required' });
   }
 
   try {
-    const data = await Data.find({
-      Date: date,  // Convert date string to Date object
-      Farm: farm
-    });
+    let data;
 
-    if (data.length === 0) {
-      return res.status(404).json({ message: 'No data found for the specified date and farm' });
+    // If date is provided, query by both 'Farm' and 'Date'
+    if (date) {
+      data = await Data.find({
+        Farm: farm,
+        Date: date
+      });
+    } 
+    // Otherwise, query by 'Farm' only
+    else {
+      data = await Data.find({
+        Farm: farm
+      });
     }
 
+    // Check if data is found
+    if (data.length === 0) {
+      return res.status(404).json({ message: 'No data found for the specified farm and date (if provided)' });
+    }
+
+    // Send the data in response
     res.json(data);
   } catch (err) {
     res.status(500).json({ message: err.message });
@@ -66,5 +79,3 @@ app.get('/api/carbon_data', async (req, res) => {
 // Set the server to listen on port 3000
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
-
-

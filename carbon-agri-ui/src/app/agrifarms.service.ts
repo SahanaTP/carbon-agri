@@ -11,11 +11,12 @@ export class AgrifarmsService {
   constructor(private _httpClient:HttpClient) { }
 
   baseUrl="http://localhost:3000/api/carbon_data";
-  fetchAllDataForAFarm(date: string, farm: string):Observable<Agrifarms[]>{
-    const params = new HttpParams()
-    .set('date', date)  // Set the 'date' query parameter
+  fetchAllDataForAFarm(farm: string, date?: string):Observable<Agrifarms[]>{
+    let params = new HttpParams()
     .set('farm', farm); // Set the 'farm' query parameter
-   
+    if (date) {
+      params = params.set('date', date); // Set 'date' only if it's provided
+    }
 
     return this._httpClient.get<Agrifarms[]>(`${this.baseUrl}`, { params });
   }

@@ -1,36 +1,29 @@
-<!-- <div class="container-fluid py-3">
-    <div class="row" style="margin-bottom: 60px;">
-        <div class="col">
-            <div ngbDropdown class="d-inline-block" style="float: right; margin-right:10px;">
-                <button type="button" class="btn btn-outline-primary" id="dropdownBasic1" ngbDropdownToggle>
-                    Select a Farm
-                </button>
-                <div ngbDropdownMenu aria-labelledby="dropdownBasic1">
-                    <button ngbDropdownItem (click)="onFarmSelect('Oklahoma')">Oklahoma</button>
-                    <button ngbDropdownItem (click)="onFarmSelect('Missouri BAU')">Missouri BAU</button>
-                    <button ngbDropdownItem (click)="onFarmSelect('Missouri ASP')">Missouri ASP</button>
-                    <button ngbDropdownItem (click)="onFarmSelect('Nebraska IM')">Nebraska IM</button>
-                    <button ngbDropdownItem (click)="onFarmSelect('Nebraska IMS')">Nebraska IMS</button>
-                    <button ngbDropdownItem (click)="onFarmSelect('Nebraska RMS')">Nebraska RMS</button>
-                </div>
-            </div>
-        </div>
-    </div> -->
+<div class = "container">
+    <br>
+    <h3 style="text-align: center"> US Agri-Carbon Heat map</h3>
+    <!-- <mat-form-field>
+        <input matInput placeholder="Enter Farm" type="text" #farmName>  
+    </mat-form-field> -->
+    
+    <mat-form-field>
+        <mat-label>Select Farm</mat-label>
+        <mat-select [(value)]="selectedFarm">
+            <mat-option></mat-option>
+            @for (option of farms; track option) {
+            <mat-option [value]="option.value">{{ option.viewValue }}</mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
+
+    <mat-form-field>
+        <input matInput placeholder="Enter Date" type="text" #date>
+    </mat-form-field>
+    <br>
+    <div class="button-container">
+        <button mat-flat-button class="custom-button" (click)="loadCarbonData(date.value,selectedFarm)">Submit</button>
+        <button mat-flat-button class="custom-button">Cancel</button>
+      </div>
+    </div>
     
     <div id="map" style="height: 1000px; width: 50%;"></div>
 
-<!-- <div id="map" #map
-leaflet [leafletOptions]="options" 
-(leafletMapReady)="onMapReady($event)"></div>
-</div> -->
-
-<!-- <div class="header-container">
-    <h1>Carbon Flux - Oklahoma Farm</h1>
-  </div>
-  <div class="image-container">
-    <img src="https://screenshots.codesandbox.io/jr9fm6/0.png" height="500" width="1000" alt="Map Image">
-    <div class="graph-container">
-    <img src="/graph1.png" height="270" width="500" alt="Graph Image">
-    <img src="/graph2.png" height="270" width="500" alt="Graph Image">
-    </div>
-</div> -->
