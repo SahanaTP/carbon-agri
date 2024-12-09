@@ -9,7 +9,11 @@ import { MatInputModule } from '@angular/material/input';
 import { MatButtonModule } from '@angular/material/button';
 import { MatTableModule } from '@angular/material/table';
 import { MatSelectModule } from '@angular/material/select';
+import { MatDatepickerModule } from '@angular/material/datepicker';
+import { MatNativeDateModule } from '@angular/material/core';
 import { icon, Marker } from 'leaflet';
+import { FormsModule } from '@angular/forms';
+
 const iconRetinaUrl = 'assets/marker-icon-2x.png';
 const iconUrl = 'assets/marker-icon.png';
 const shadowUrl = 'assets/marker-shadow.png';
@@ -34,7 +38,7 @@ interface Farm{
 @Component({
   selector: 'app-leaflet',
   standalone: true,
-  imports:[LeafletModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatTableModule, MatSelectModule],
+  imports:[LeafletModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatTableModule, MatSelectModule, MatDatepickerModule, MatNativeDateModule, FormsModule],
   templateUrl: './leaflet.component.html',
   styleUrls: ['./leaflet.component.scss']
 })
@@ -45,6 +49,7 @@ export class LeafletComponent implements OnInit {
   dateData: string = '2016-06-25'
   heatData:any;
   agrifarms:Agrifarms[]=[];
+  selectedDate: string = '2016-06-25';
   
 
   constructor(private agrifarmsService:AgrifarmsService){}
@@ -59,8 +64,17 @@ export class LeafletComponent implements OnInit {
 
   selectedFarm = this.farms[0].value;
 
-  loadCarbonData(date: string, farm: string) {
-    this.agrifarmsService.fetchAllDataForAFarm(farm, date).subscribe(data => {
+
+  loadCarbonData(date: Date | string, farm: string) {
+    // Format the date to 'YYYY-MM-DD'
+    let formattedDate: string = '';
+    if (typeof date === 'string') {
+      formattedDate = new Date(date).toISOString().split('T')[0]; // Handles string input
+    } else if (date instanceof Date) {
+      formattedDate = date.toISOString().split('T')[0]; // Handles Date object
+    }
+  
+    this.agrifarmsService.fetchAllDataForAFarm(farm, formattedDate).subscribe(data => {
       this.agrifarms=data;
        this.heatData = {
         max: 10,

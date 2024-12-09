@@ -1,18 +1,20 @@
 /* Container styling */
 .container {
     margin: 20px auto;
-    max-width: 400px;
+    margin-left: 40px;
+    max-width: 350px;
     padding: 20px;
     background-color: #f8f9fa;
     border-radius: 8px;
-    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 2px 5px #0000001a;
     justify-content: center;
     align-items: center;
-    float: center;   
+    float: left;   
   }
 
   .table-container {
     margin: 20px auto;
+    
     max-width: 1500px;
     padding: 20px;
     background-color: #f8f9fa;
@@ -24,30 +26,57 @@
     clear: both;
   }
 
-  .col1{
+  .col3{
     margin: 20px auto;
+    
     padding: 20px;
     background-color: #f8f9fa;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     width: 70%; /* Adjust width as needed, e.g., 100%, 80%, etc. */
-    max-width: 1000px; /* Optional: limit the maximum width */
+    max-width: 700px; /* Optional: limit the maximum width */
+    height: 50%; /* Set a fixed height, adjust as needed */
+    overflow: auto; /* Optional: add scroll if content overflows */
+}
+
+.col4 {
+    margin: 20px auto;
+    
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 70%; /* Adjust width as needed, e.g., 100%, 80%, etc. */
+    max-width: 700px; /* Optional: limit the maximum width */
+    height: 50%; /* Set a fixed height, adjust as needed */
+    overflow: auto; /* Optional: add scroll if content overflows */
+}
+
+.col1 {
+    margin: 20px auto;
+    
+    padding: 20px;
+    background-color: #f8f9fa;
+    border-radius: 8px;
+    box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    width: 70%; /* Adjust width as needed, e.g., 100%, 80%, etc. */
+    max-width: 700px; /* Optional: limit the maximum width */
     height: 50%; /* Set a fixed height, adjust as needed */
     overflow: auto; /* Optional: add scroll if content overflows */
 }
 
 .col2 {
     margin: 20px auto;
+    
     padding: 20px;
     background-color: #f8f9fa;
     border-radius: 8px;
     box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
     width: 70%; /* Adjust width as needed, e.g., 100%, 80%, etc. */
-    max-width: 1000px; /* Optional: limit the maximum width */
+    max-width: 700px; /* Optional: limit the maximum width */
     height: 50%; /* Set a fixed height, adjust as needed */
     overflow: auto; /* Optional: add scroll if content overflows */
 }
-
   
   /* Heading styling */
   h3 {

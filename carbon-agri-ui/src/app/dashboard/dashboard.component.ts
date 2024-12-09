@@ -51,7 +51,9 @@ export class DashboardComponent {
 datedata:string[]=[];
 ndvi:number[]=[];
 npp:number[]=[];
-//chart:any;
+avgNppyByYear: { year: string; avgNppy: number }[] = [];
+barChart: Chart | undefined; // Instance for the bar chart
+
 chart1: Chart | undefined; // Instance for the first chart
 chart2: Chart | undefined; // Instance for the second chart
 
@@ -86,14 +88,37 @@ chart2: Chart | undefined; // Instance for the second chart
       this.agrifarms=data;
       this.dataSource = new MatTableDataSource<Agrifarms>(data);
       this.dataSource.paginator = this.paginator;
+
+      this.datedata = [];
+      this.ndvi = [];
+      this.npp = [];
+      const nppyByYear: { [year: string]: number[] } = {};
+
       if(this.agrifarms!=null){
         this.agrifarms.map(o=>{
           this.datedata.push(o.Date);
           this.ndvi.push(o.NDVI);
           this.npp.push(o.Npp);
-        })
+          const year = new Date(o.Date).getFullYear().toString();
+        
+          if (!nppyByYear[year]) {
+          nppyByYear[year] = [];
+            }
+            nppyByYear[year].push(o.NPPy);
+          });
+
+      // Calculate average NPPy for each year
+      this.avgNppyByYear = Object.keys(nppyByYear).map((year) => {
+        const avgNppy =
+          nppyByYear[year].reduce((sum, value) => sum + value, 0) /
+          nppyByYear[year].length;
+        return { year, avgNppy };
+      });
+  
         this.Renderlinechart(this.datedata, this.ndvi, 'lineGraph', 'NDVI', 'chart1');
-      this.Renderlinechart(this.datedata, this.npp, 'lineGraph2', 'NPP', 'chart2');
+        this.Renderlinechart(this.datedata, this.npp, 'lineGraph2', 'NPP', 'chart2');
+        this.RenderBarChart();
+        this.RenderScatterPlot();
       }
     })
   }
@@ -147,6 +172,91 @@ chart2: Chart | undefined; // Instance for the second chart
     console.error('Canvas element not found!');
   }
 }
+
+RenderBarChart() {
+  const labels = this.avgNppyByYear.map((item) => item.year);
+  const values = this.avgNppyByYear.map((item) => item.avgNppy);
+
+  const canvas = document.getElementById('barGraph') as HTMLCanvasElement;
+  if (canvas) {
+    if (this.barChart) {
+      this.barChart.destroy();
+    }
+
+    this.barChart = new Chart(canvas, {
+      type: 'bar',
+      data: {
+        labels: labels,
+        datasets: [
+          {
+            label: 'Average NPPy',
+            data: values,
+            backgroundColor: '#3e95cd', // Bar color
+            borderColor: '#3e95cd', // Border color
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: { display: true, title: { display: true, text: 'Year' } },
+          y: { display: true, title: { display: true, text: 'Average NPPy' } },
+        },
+      },
+    });
+  } else {
+    console.error('Canvas element for bar chart not found!');
+  }
+}
+
+
+scatterChart: Chart | undefined; // Instance for the scatter plot
+
+RenderScatterPlot() {
+  const scatterData = this.agrifarms.map((farm) => ({
+    x: farm.NDVI,
+    y: farm.GPP,
+  }));
+
+  const canvas = document.getElementById('scatterGraph') as HTMLCanvasElement;
+  if (canvas) {
+    if (this.scatterChart) {
+      this.scatterChart.destroy(); // Destroy previous chart instance
+    }
+
+    this.scatterChart = new Chart(canvas, {
+      type: 'scatter',
+      data: {
+        datasets: [
+          {
+            label: 'GPP vs NDVI',
+            data: scatterData,
+            backgroundColor: 'rgba(62, 149, 205, 0.8)', // Point color
+            borderColor: 'rgba(62, 149, 205, 1)', // Border color
+            borderWidth: 1,
+          },
+        ],
+      },
+      options: {
+        responsive: true,
+        scales: {
+          x: {
+            type: 'linear',
+            position: 'bottom',
+            title: { display: true, text: 'NDVI' },
+          },
+          y: {
+            title: { display: true, text: 'GPP' },
+          },
+        },
+      },
+    });
+  } else {
+    console.error('Canvas element for scatter plot not found!');
+  }
+}
+
 
 }
 

@@ -1,9 +1,6 @@
 <div class = "container">
     <br>
     <h3 style="text-align: center"> US Agri-Carbon Heat map</h3>
-    <!-- <mat-form-field>
-        <input matInput placeholder="Enter Farm" type="text" #farmName>  
-    </mat-form-field> -->
     
     <mat-form-field>
         <mat-label>Select Farm</mat-label>
@@ -15,12 +12,18 @@
         </mat-select>
     </mat-form-field>
 
-    <mat-form-field>
+    <!-- <mat-form-field>
         <input matInput placeholder="Enter Date" type="text" #date>
-    </mat-form-field>
+    </mat-form-field> -->
+    <mat-form-field appearance="outline">
+        <mat-label>Select Date</mat-label>
+        <input matInput [matDatepicker]="picker" [(ngModel)]="selectedDate" placeholder="MM/DD/YYYY">
+        <mat-datepicker-toggle matSuffix [for]="picker"></mat-datepicker-toggle>
+        <mat-datepicker #picker></mat-datepicker>
+      </mat-form-field>
     <br>
     <div class="button-container">
-        <button mat-flat-button class="custom-button" (click)="loadCarbonData(date.value,selectedFarm)">Submit</button>
+        <button mat-flat-button class="custom-button" (click)="loadCarbonData(selectedDate,selectedFarm)">Submit</button>
         <button mat-flat-button class="custom-button">Cancel</button>
       </div>
     </div>
