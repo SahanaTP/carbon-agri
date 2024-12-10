@@ -13,6 +13,7 @@ import { MatDatepickerModule } from '@angular/material/datepicker';
 import { MatNativeDateModule } from '@angular/material/core';
 import { icon, Marker } from 'leaflet';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 
 const iconRetinaUrl = 'assets/marker-icon-2x.png';
 const iconUrl = 'assets/marker-icon.png';
@@ -38,7 +39,7 @@ interface Farm{
 @Component({
   selector: 'app-leaflet',
   standalone: true,
-  imports:[LeafletModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatTableModule, MatSelectModule, MatDatepickerModule, MatNativeDateModule, FormsModule],
+  imports:[LeafletModule, MatFormFieldModule, MatInputModule, MatButtonModule, MatTableModule, MatSelectModule, MatDatepickerModule, MatNativeDateModule, FormsModule, CommonModule],
   templateUrl: './leaflet.component.html',
   styleUrls: ['./leaflet.component.scss']
 })
@@ -49,6 +50,7 @@ export class LeafletComponent implements OnInit {
   dateData: string = '2016-06-25'
   heatData:any;
   agrifarms:Agrifarms[]=[];
+  totalcarbon:number=0;
   selectedDate: string = '2016-06-25';
   
 
@@ -76,6 +78,15 @@ export class LeafletComponent implements OnInit {
   
     this.agrifarmsService.fetchAllDataForAFarm(farm, formattedDate).subscribe(data => {
       this.agrifarms=data;
+      // Calculate total Npp
+      const totalNpp = this.agrifarms.reduce((sum, farm) => sum + (farm.Npp || 0), 0);
+      const validNppCount = this.agrifarms.filter(farm => farm.Npp != null && !isNaN(farm.Npp)).length;
+      const meanNpp = validNppCount > 0 ? (totalNpp / validNppCount) : 0;
+      // Convert total Npp (kgC/m2) to total carbon (kgCO2)
+      this.totalcarbon = meanNpp * 10000; // Assuming 1 m^2 area per Npp value converted to hectares
+
+      console.log(`Total Carbon Emission (kgC): ${this.totalcarbon}`);
+
        this.heatData = {
         max: 10,
         data: this.agrifarms.map(farm => ({
@@ -101,9 +112,35 @@ export class LeafletComponent implements OnInit {
   }
   ngOnInit(): void {
     this.initMap();
-    
+    this.addLegend(); // Add legend to the map
     
   }
+
+  private addLegend(): void {
+    const legend = new leaflet.Control({ position: 'bottomright' });
+  
+    legend.onAdd = () => {
+      const div = leaflet.DomUtil.create('div', 'info legend');
+      const labels = ['Low', 'Medium', 'High']; // Labels for the colors
+      const colors = ['green', 'yellow', 'red']; // Green for low, yellow for medium, red for high
+  
+      div.innerHTML = '<h6> </h6>';
+      // Loop through the labels and colors to generate legend items
+      for (let i = 0; i < labels.length; i++) {
+        div.innerHTML +=
+          `<div style="display: flex; align-items: center; margin-bottom: 4px;">
+             <i style="background:${colors[i]}; width: 18px; height: 18px; display: inline-block; margin-right: 8px; border: 1px solid #000;"></i>
+             ${labels[i]}
+           </div>`;
+      }
+      return div;
+    };
+  
+    legend.addTo(this.map);
+  }
+  
+  
+  
 
   private initMap(): void {
     // Initialising map with center point by using the coordinates

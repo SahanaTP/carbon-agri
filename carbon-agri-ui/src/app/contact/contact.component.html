@@ -1,0 +1,14 @@
+<div class="contact-container">
+    <div class="image-content">
+        <img src="assets/contact_image.webp" alt="Contact Image" />
+      </div>
+    <div class="text-content">
+      <h2>Meet Our Team</h2>
+      <div class="team-member" *ngFor="let member of teamMembers">
+        <h3>{{ member.name }}</h3>
+        <p>{{ member.email }}</p>
+      </div>
+    </div>
+    
+  </div>
+  

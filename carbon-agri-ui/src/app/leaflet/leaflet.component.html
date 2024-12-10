@@ -1,3 +1,4 @@
+<div class="main-layout">
 <div class = "container">
     <br>
     <h3 style="text-align: center"> US Agri-Carbon Heat map</h3>
@@ -24,9 +25,17 @@
     <br>
     <div class="button-container">
         <button mat-flat-button class="custom-button" (click)="loadCarbonData(selectedDate,selectedFarm)">Submit</button>
-        <button mat-flat-button class="custom-button">Cancel</button>
       </div>
     </div>
+      
     
-    <div id="map" style="height: 1000px; width: 50%;"></div>
+    <div id="map" style="height: 700px; width: 50%;"></div>
+
+</div>
+
+<div class="container-cvm">
+    <h6 style="text-align: center">Estimated Total Carbon flux: {{selectedFarm}} : {{selectedDate | date: 'MM/dd/yyyy'}}</h6>
+    <h4 style="text-align: center; font-weight: bold;">{{totalcarbon | number: '1.2-2'}} KgC</h4>
+    <!-- Content for crop vegetation metrics goes here -->
+</div>
 

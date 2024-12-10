@@ -11,14 +11,23 @@
             }
         </mat-select>
     </mat-form-field>
+    <mat-form-field>
+        <mat-label>Select Data Source</mat-label>
+        <mat-select [(value)]="selectedDataSource">
+            <mat-option></mat-option>
+            @for (option of sources; track option) {
+            <mat-option [value]="option.value">{{ option.viewValue }}</mat-option>
+            }
+        </mat-select>
+    </mat-form-field>
     
     <br>
     <div class="button-container">
-        <button mat-flat-button class="custom-button" (click)="fetchData(selectedFarm)">Submit</button>
+        <button mat-flat-button class="custom-button" (click)="fetchData(selectedFarm,selectedDataSource)">Submit</button>
       </div>
 </div>
 
-<div class="row">
+<div class="row" *ngIf="isRemoteDataLoaded">
     <div class="col1">
         <h6>{{selectedFarm}}: Average NPPy across the years</h6>
         <canvas id="barGraph"></canvas>
@@ -42,7 +51,25 @@
     
 </div>
 
-<div class = "table-container">
+<div class="ground-row" *ngIf="isGroundDataLoaded">
+    <div class="gcol1">
+        <h6>{{selectedFarm}}: Average NEEy across the years</h6>
+        <canvas id="gbarGraph"></canvas>
+    </div>
+    <div class="gcol2">
+        <h6>{{selectedFarm}}: GPP across the years</h6>
+        <canvas id="glineGraph"></canvas>
+
+    </div>
+    <div class="gcol3">
+        <h6>{{selectedFarm}}: NEE across the years</h6>
+        <canvas id="glineGraph2"></canvas>
+
+    </div> 
+
+</div>
+
+<div class = "table-container" *ngIf="isRemoteDataLoaded">
         <h6>{{selectedFarm}}: Vegetation Data</h6>
       <table mat-table [dataSource]="dataSource" class="mat-elevation-z8">
 

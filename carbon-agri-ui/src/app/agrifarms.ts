@@ -15,5 +15,5 @@ export interface Agrifarms {
     AtmosphericPressure: number, // Atmospheric Pressure as a number
     RelativeHumidity: number,    // Relative Humidity as a number
     Precipitation: number,       // Precipitation as a number
-    Farm: string 
+    Farm: string
 }

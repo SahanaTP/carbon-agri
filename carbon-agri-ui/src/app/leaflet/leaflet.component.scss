@@ -1,10 +1,12 @@
+
+
 #map { margin: 20px auto;height: 600px; width: 120%; border-color: #333; border: 2px solid black;}
 
 
 
   /* Container styling */
 .container {
-    margin-top: 50px;
+    margin-top: 30px;
     margin-left: 50px;
     max-width: 350px;
     padding: 20px;
@@ -68,3 +70,42 @@
     color: white; /* Change text color on hover */
     transition: background-color 0.3s ease-in-out, color 0.3s ease-in-out; /* Smooth transition */
   }
+
+  .info.legend {
+    background-color: white;
+    padding: 8px;
+    border-radius: 4px;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.2);
+    font-size: 14px;
+    line-height: 18px;
+    color: #555;
+  }
+  
+  .info.legend i {
+    display: inline-block;
+    width: 18px;
+    height: 18px;
+    margin-right: 8px;
+    opacity: 0.8;
+    border: 1px solid #000;
+  }
+  
+  .container-cvm {
+    background-color: #f9f9f9; /* Light gray background for better contrast */
+    border: 1px solid #ddd;   /* Border around the container */
+    border-radius: 8px;       /* Rounded corners */
+    padding: 16px;            /* Spacing inside the container */
+    margin: 16px auto;        /* Center the container with some margin */
+    max-width: 800px;         /* Limit the container's width */
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1); /* Subtle shadow for depth */
+    margin-left: 37%;
+  }
+  
+  .container-cvm h3 {
+    font-size: 25px;
+    color: #333;
+    margin-bottom: 20px;
+    text-align: left;
+    font-weight: bold;
+  }
+  

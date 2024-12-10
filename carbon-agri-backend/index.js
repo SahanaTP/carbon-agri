@@ -10,6 +10,7 @@ const app = express();
 app.use(cors());
 app.use(bodyParser.json());
 
+
 // MongoDB Connection URI (replace with your MongoDB URI)
 mongoose.connect('mongodb://localhost:27017/agriculture_db')
 .then(() => console.log('MongoDB connected...'))
@@ -35,8 +36,37 @@ const DataSchema = new mongoose.Schema({
   Farm: { type: String, required: true }
 }, { collection: 'carbon_data' });
 
+const GroundDataSchema = new mongoose.Schema({
+  season: { type: String, required: true },
+  precipitation: { type: Number, required: true },
+  Longwave_in: { type: Number, required: true },
+  GPP_kg_m2_hr: { type: Number, required: true },
+  Soil_temperature: { type: Number, required: true },
+  NEE_kgC_m2_hr: { type: Number, required: true },
+  "Wind Direction": { type: Number, required: true },
+  Latent_heat: { type: Number, required: true },
+  TIMESTAMP: { type: String, required: true },
+  Shortwave_in: { type: Number, required: true },
+  RECO_kg_m2_hr: { type: Number, required: true },
+  "Soil heat flux": { type: Number, required: true },
+  longwave_out: { type: Number, required: true },
+  "Soil water content": { type: Number, required: true },
+  shortwave_out: { type: Number, required: true },
+  netradiation: { type: Number, required: true },
+  Farm: { type: String, required: true },
+  "Air temperature": { type: Number, required: true },
+  Humidity: { type: Number, required: true },
+  "Photosynthetic photon flux density out": { type: Number, required: true },
+  Wind_speed: { type: Number, required: true },
+  Relative_Humidity: { type: Number, required: true },
+  "Photosynthetic photon flux density in": { type: Number, required: true },
+  CO2_conc: { type: Number, required: true },
+  crop_type: {type: String, required: true}
+}, { collection: 'ground_carbon_data' });
+
 // Create a model from the schema
 const Data = mongoose.model('carbon_data', DataSchema);
+const GroundData = mongoose.model('ground_data', GroundDataSchema);
 
 // API endpoint to fetch records based on Date and Farm
 app.get('/api/carbon_data', async (req, res) => {
@@ -75,6 +105,45 @@ app.get('/api/carbon_data', async (req, res) => {
     res.status(500).json({ message: err.message });
   }
 });
+
+// Add API endpoint for ground_carbon_data
+app.get('/api/ground_data', async (req, res) => {
+  const { farm, date } = req.query;
+
+  // Validate query parameters
+  if (!farm) {
+    return res.status(400).json({ message: 'Farm query parameter is required' });
+  }
+
+  try {
+    let data;
+
+    // If date is provided, query by both 'Farm' and 'Date'
+    if (date) {
+      data = await GroundData.find({
+        Farm: farm,
+        Date: date
+      });
+    } 
+    // Otherwise, query by 'Farm' only
+    else {
+      data = await GroundData.find({
+        Farm: farm
+      });
+    }
+
+    // Check if data is found
+    if (data.length === 0) {
+      return res.status(404).json({ message: 'No data found for the specified farm and date (if provided)' });
+    }
+
+    // Send the data in response
+    res.json(data);
+  } catch (err) {
+    res.status(500).json({ message: err.message });
+  }
+});
+
 
 // Set the server to listen on port 3000
 const PORT = process.env.PORT || 3000;
